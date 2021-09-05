@@ -28,8 +28,8 @@ def start(message):
 def handler_new_member(message):
     id = str(message.chat.id)
     try:
-        user = message.new_chat_member
-        photo = bot.get_user_profile_photos(user.id, limit=1).photos[0]
+        user = message.new_chat_members[0]
+        photo = bot.get_user_profile_photos(user.id, limit=1).photos[0][0]
         file_info = bot.get_file(photo.file_id)
         downloaded_file = bot.download_file(file_info.file_path)
         with open(f'temp/{user.id}.jpg', 'wb') as file:
@@ -40,7 +40,7 @@ def handler_new_member(message):
             bot.send_message(id, f'Шлюха детектед: {user.first_name}')
             bot.kick_chat_member(id, user.id)
     except Exception as e:
-        bot.send_message(538231919, f'handler_new_member:\n{e}')
+        bot.send_message(id, f'handler_new_member:\n{e}')
 
 
 if __name__ == '__main__':
